@@ -4,22 +4,22 @@ import { useParams, Link } from 'react-router-dom';
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [randomProducts, setRandomProducts] = useState([]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   useEffect(() => {
     // Fetch detailed product information
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then(response => response.json())
-      .then(data => setProduct(data));
-
-    // Fetch all products to get a list for random selection
-    fetch('https://fakestoreapi.com/products')
-      .then(response => response.json())
       .then(data => {
-        // Select 6 random products (excluding the current product)
-        const shuffledProducts = data.sort(() => 0.5 - Math.random());
-        const randomSelection = shuffledProducts.slice(0, 6).filter(p => p.id !== parseInt(id));
-        setRandomProducts(randomSelection);
+        setProduct(data);
+        // Fetch recommended products based on the same category
+        fetch(`https://fakestoreapi.com/products/category/${data.category}`)
+          .then(response => response.json())
+          .then(products => {
+            // Exclude the current product and select up to 6 recommended products
+            const filteredProducts = products.filter(p => p.id !== parseInt(id));
+            setRecommendedProducts(filteredProducts.slice(0, 6));
+          });
       });
   }, [id]);
 
@@ -46,15 +46,15 @@ const ProductDetail = () => {
 
       <h3 className="text-2xl font-bold mt-8">You might also like</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-        {randomProducts.map(randomProduct => (
-          <Link key={randomProduct.id} to={`/products/${randomProduct.id}`} className="flex items-stretch">
+        {recommendedProducts.map(recommendedProduct => (
+          <Link key={recommendedProduct.id} to={`/products/${recommendedProduct.id}`} className="flex items-stretch">
             <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-col">
-              <img className="w-full h-40 object-cover" src={randomProduct.image} alt={randomProduct.title} />
+              <img className="w-full h-40 object-cover" src={recommendedProduct.image} alt={recommendedProduct.title} />
               <div className="px-6 py-4 flex-1">
-                <div className="font-bold text-xl mb-2">{randomProduct.title}</div>
+                <div className="font-bold text-xl mb-2">{recommendedProduct.title}</div>
                 <div className="flex items-center">
-                  {renderStars(randomProduct.rating.rate)}
-                  <span className="ml-2 text-gray-600">{randomProduct.rating.rate.toFixed(1)}</span>
+                  {renderStars(recommendedProduct.rating.rate)}
+                  <span className="ml-2 text-gray-600">{recommendedProduct.rating.rate.toFixed(1)}</span>
                 </div>
               </div>
             </div>
