@@ -5,7 +5,7 @@ import Recommendation from "./components/Recommendation";
 import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import ProductDetail from "./components/ProductDetail";
+import ProductDetails from "./components/ProductDetails";
 
 const App = () => {
   return (
@@ -24,7 +24,7 @@ const App = () => {
 
       <Routes>
         <Route exact path="/" element={<Hero />} />
-        <Route path="/products/:id" element={<ProductDetail />}>
+        <Route path="/products/:id" element={<ProductDetails />}>
           
           </Route>
       </Routes>

@@ -1,19 +1,19 @@
 import React from 'react';
 
 const ProductCard = ({ product }) => {
-  const { title, image, rating,price } = product;
+  const { name, description, brand, price, image, rating } = product;
 
   const renderStars = (rating) => {
     const stars = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i <= 5; i++) {
       stars.push(
         <svg
           key={i}
-          className={`w-4 h-4 ${i < rating ? 'text-yellow-500' : 'text-gray-300'}`}
+          className={`h-5 w-5 ${i <= rating ? 'text-yellow-500' : 'text-gray-300'}`}
           fill="currentColor"
-          viewBox="0 0 20 20"
+          viewBox="0 0 24 24"
         >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.948a1 1 0 00.95.69h4.149c.969 0 1.371 1.24.588 1.81l-3.36 2.44a1 1 0 00-.364 1.118l1.287 3.948c.3.921-.755 1.688-1.54 1.118l-3.36-2.44a1 1 0 00-1.175 0l-3.36 2.44c-.784.57-1.84-.197-1.54-1.118l1.287-3.948a1 1 0 00-.364-1.118l-3.36-2.44c-.784-.57-.38-1.81.588-1.81h4.149a1 1 0 00.95-.69l1.286-3.948z" />
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
       );
     }
@@ -21,20 +21,31 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg">
-      <img className="w-full h-[28rem] object-fit" src={image} alt={title} />
+    <div className="max-w-sm rounded-lg overflow-hidden shadow-lg m-4 bg-white">
+      <img className="w-full h-64 object-cover" src={image} alt={name} />
       <div className="px-6 py-4">
-        <div className="font-medium text-xl mb-2">{title}</div>
-        <div className="flex items-center justify-between">
-            <div className='flex'>
-
-          {renderStars(rating.rate)}
-          <span className="ml-2 text-gray-600">{rating.rate.toFixed(1)}</span>
-            </div>
-            <div className='font-bold text-xl mb-2'>
-                ${price}
-            </div>
+        <div className="font-semibold text-xl mb-2">{name}</div>
+        <p className="text-gray-700 text-base mb-4">{description}</p>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-sm text-gray-600">{brand}</div>
+          <div className="font-bold text-xl">${price}</div>
         </div>
+        <div className="flex items-center">
+          <div className="flex">
+            {renderStars(rating)}
+            <span className="ml-2 text-gray-600">{rating.toFixed(1)}</span>
+          </div>
+        </div>
+      </div>
+      <div className="px-6 pt-4 pb-2">
+        {product.categories.map((category, index) => (
+          <span
+            key={index}
+            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+          >
+            {category}
+          </span>
+        ))}
       </div>
     </div>
   );
