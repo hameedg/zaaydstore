@@ -1,54 +1,36 @@
-import React from "react";
+// App.js
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Recommendation from "./components/Recommendation";
-import Footer from "./components/Footer";
+import ProductDetails from "./components/ProductDetails";
+import Cart from "./components/Cart";
+import Search from "./components/Search";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import ProductDetails from "./components/ProductDetails";
 
 const App = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
+
+  const removeFromCart = (id) => {
+    setCartItems(cartItems.filter(item => item.objectID !== id));
+  };
+
   return (
     <>
-      {/* <Router>
-      <div className="container mx-auto px-4 py-8">
-        <Switch>
-          <Route path="/" exact>
-          </Route>
-          <Route path="/products/:id">
-          </Route>
-        </Switch>
-      </div>
-    </Router> */}
-    <Layout>
-
-      <Routes>
-        <Route exact path="/" element={<Hero />} />
-        <Route path="/products/:id" element={<ProductDetails />}>
-          
-          </Route>
-      </Routes>
-
-    </Layout>
-      {/* <ProductDetail />
-      <Hero />
-      <Recommendation />
-      <Footer /> */}
+      <Layout>
+        <Routes>
+          <Route exact path="/" element={<Hero addToCart={addToCart} />} />
+          <Route path="/products/:id" element={<ProductDetails addToCart={addToCart} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} />} />
+          <Route path="/search" element={<Search />} />
+        </Routes>
+      </Layout>
     </>
   );
 };
 
 export default App;
-
-{
-  /* <Router>
-<Layout>
-  <Routes>
-    <Route exact path="/" element={<Home/>}/>
-    <Route exact path="/login" element={<Login/>}/>
-    <Route exact path="/recovery-password" element={<RecoveryPassword/>}/>
-    <Route path="*" element={<NotFound/>}/>
-  </Routes>
-</Layout>
-</Router> */
-}
